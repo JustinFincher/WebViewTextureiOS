@@ -12,11 +12,6 @@
 
 @end
 
-void UWVHelloFromUnity()
-{
-    NSLog(@"HelloFromUnity HelloFromUnity");
-}
-
 int UWVCreateWebView(float width, float height)
 {
     return [[UnityWebView_for_iOS_Manager sharedManager]CreateWebView:width
@@ -35,7 +30,7 @@ void UWVSetWebViewTexturePtr(int index, uintptr_t ptr, int graphicAPI)
                                                                   :ptr
                                                                   :graphicAPI];
 }
-void UWVUpdateWebViewTexture(int index)
+void UWVUpdateWebViewTexture(int index, int graphicAPI)
 {
-    [[UnityWebView_for_iOS_Manager sharedManager] UpdateWebViewTexture:index];
+    [[UnityWebView_for_iOS_Manager sharedManager] UpdateWebViewTexture:index :graphicAPI];
 }

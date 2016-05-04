@@ -7,6 +7,7 @@
 //
 
 #import "UnityWebView_for_iOS_Manager.h"
+#import "UnityWebView_for_iOS_GLTexture.h"
 
 @interface UnityWebView_for_iOS_Manager ()
 
@@ -50,28 +51,83 @@
 {
     NSLog(@"SetTextureIntPtr Called");
     NSLog(@"ptr = %lu", ptr);
-    id<MTLTexture> ptrToMetalTexture = (__bridge_transfer id<MTLTexture>)(void*) ptr;
-    NSLog(@"width : %lu",(unsigned long)[ptrToMetalTexture width]);
-    NSLog(@"height : %lu",(unsigned long)[ptrToMetalTexture height]);
+    NSLog(@"graphicAPI = %d", graphicAPI);
     
-    NSLog(@"[setObjectptrToMetalTextureforKey:%d",index);
-    [self.webViewDict setObject:ptrToMetalTexture forKey:[NSString stringWithFormat:@"%d",index]];
+    //metal
+    if (graphicAPI == 0)
+    {
+        id<MTLTexture> ptrToMetalTexture = (__bridge_transfer id<MTLTexture>)(void*) ptr;
+        NSLog(@"width : %lu",(unsigned long)[ptrToMetalTexture width]);
+        NSLog(@"height : %lu",(unsigned long)[ptrToMetalTexture height]);
+        
+        NSLog(@"[setObjectptrToMetalTextureforKey:%d",index);
+        [self.webViewDict setObject:ptrToMetalTexture forKey:[NSString stringWithFormat:@"%d",index]];
+    }
+    
+    //openGL
+    if (graphicAPI == 1)
+    {
+        GLuint glTexture = (GLuint)ptr;
+        glBindTexture(GL_TEXTURE_2D, glTexture);
+        
+        UnityWebView_for_iOS_GLTexture *ptrToGLTexture = [[UnityWebView_for_iOS_GLTexture alloc] init];
+        ptrToGLTexture.texture = glTexture;
+        
+        [self.webViewDict setObject:ptrToGLTexture forKey:[NSString stringWithFormat:@"%d",index]];
+    }
 }
 
 
 - (void)UpdateWebViewTexture:(int)index
+                            :(int)graphicAPI
 {
-    WKWebView *webView = [self.webViewArray objectAtIndex:index];
-    id<MTLTexture> ptrToMetalTexture = [self.webViewDict objectForKey:[NSString stringWithFormat:@"%d",index]];
-//    NSLog(@"width : %lu",(unsigned long)[ptrToMetalTexture width]);
-//    NSLog(@"height : %lu",(unsigned long)[ptrToMetalTexture height]);
-    [self updateWebViewTexture:webView
-                              :ptrToMetalTexture];
+     WKWebView *webView = [self.webViewArray objectAtIndex:index];
+    
+    if (graphicAPI == 0)
+    {
+        id<MTLTexture> ptrToMetalTexture = [self.webViewDict objectForKey:[NSString stringWithFormat:@"%d",index]];
+        [self updateWebViewMetalTexture:webView
+                                  :ptrToMetalTexture];
+    }
+    
+    if (graphicAPI == 1)
+    {
+        
+        UnityWebView_for_iOS_GLTexture *ptrToGLTexture = [self.webViewDict objectForKey:[NSString stringWithFormat:@"%d",index]];
+        [self updateWebViewGLESTexture:webView
+                                      :ptrToGLTexture];
+    }
 }
 
 #pragma mark UIView to Texture Methods
-- (void)updateWebViewTexture:(WKWebView *)webView
-                            :(id<MTLTexture>)texture
+- (void)updateWebViewGLESTexture:(WKWebView *)webView
+                                 :(UnityWebView_for_iOS_GLTexture *)texture
+{
+    GLuint gltexture = texture.texture;
+    // create a suitable CoreGraphics context
+    CGColorSpaceRef colourSpace = CGColorSpaceCreateDeviceRGB();
+    CGContextRef context =
+    CGBitmapContextCreate(&gltexture,
+                          webView.bounds.size.width, webView.bounds.size.height,
+                          8, 4*webView.bounds.size.width,
+                          colourSpace,
+                          kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
+    CGColorSpaceRelease(colourSpace);
+    
+    // draw the view to the buffer
+    [webView.layer renderInContext:context];
+    
+    // upload to OpenGL
+    glTexImage2D(GL_TEXTURE_2D, 0,
+                 GL_RGBA,
+                 webView.bounds.size.width, webView.bounds.size.height, 0,
+                 GL_RGBA, GL_UNSIGNED_BYTE, &gltexture);
+    
+    // clean up
+    CGContextRelease(context);
+}
+- (void)updateWebViewMetalTexture:(WKWebView *)webView
+                                 :(id<MTLTexture>)texture
 {
     UIGraphicsBeginImageContextWithOptions(webView.frame.size, NO, 1.0f);
     [webView drawViewHierarchyInRect:webView.bounds afterScreenUpdates:NO];
@@ -117,7 +173,7 @@
         self.invisibleView = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
         self.invisibleView.userInteractionEnabled = NO;
         [[[[UIApplication sharedApplication] delegate] window] addSubview:self.invisibleView];
-        self.invisibleView.alpha = 0.5f;
+        self.invisibleView.alpha = 0.0f;
     }
     return self;
 }

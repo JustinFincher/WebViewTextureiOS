@@ -13,8 +13,7 @@
 
 @end
 
-extern "C" void UWVHelloFromUnity();
 extern "C" int UWVCreateWebView(float width, float height);
 extern "C" void UWVUpdateWebView(int index, float width, float height);
 extern "C" void UWVSetWebViewTexturePtr(int index, uintptr_t ptr, int graphicAPI);
-extern "C" void UWVUpdateWebViewTexture(int index);
+extern "C" void UWVUpdateWebViewTexture(int index, int graphicAPI);

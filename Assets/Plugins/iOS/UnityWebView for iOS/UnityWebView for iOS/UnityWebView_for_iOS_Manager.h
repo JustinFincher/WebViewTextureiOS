@@ -10,6 +10,8 @@
 #import "WebKit/WebKit.h"
 #import <UIKit/UIKit.h>
 #import <Metal/Metal.h>
+#import <OpenGLES/ES2/gl.h>
+#import <OpenGLES/ES2/glext.h>
 #import <QuartzCore/QuartzCore.h>
 
 @interface UnityWebView_for_iOS_Manager : NSObject
@@ -26,6 +28,7 @@
                         :(uintptr_t)ptr
                         :(int)graphicAPI;
 
-- (void)UpdateWebViewTexture:(int)index;
+- (void)UpdateWebViewTexture:(int)index
+                            :(int)graphicAPI;
 
 @end

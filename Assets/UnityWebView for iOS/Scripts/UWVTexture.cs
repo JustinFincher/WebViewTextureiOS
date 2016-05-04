@@ -12,7 +12,7 @@ public class UWVTextureEditor : Editor
 {
 	public void OnSceneGUI ()
 	{
-		UWVTexture UWVTextureRawImage = (UWVTexture)target;
+		//UWVTexture UWVTextureRawImage = (UWVTexture)target;
 	}
 	public void OnEnable()
 	{
@@ -21,6 +21,8 @@ public class UWVTextureEditor : Editor
 	public override void OnInspectorGUI ()
 	{
 		UWVTexture UWVTextureRawImage = (UWVTexture)target;
+
+		EditorGUILayout.HelpBox ("Texture Format : ARGB32 only for now \r\nGraphic API : follow build settings",MessageType.Info);
 
 		UWVTextureRawImage.textureType = (UWVTextureFormatType)EditorGUILayout.EnumPopup ("Texture Format", UWVTextureRawImage.textureType);
 		UWVTextureRawImage.graphicAPIType = (UWVTextureGraphicAPIType)EditorGUILayout.EnumPopup ("Graphic API", UWVTextureRawImage.graphicAPIType);
@@ -118,9 +120,12 @@ public class UWVTexture : MonoBehaviour
 
 	void LateUpdate ()
 	{
+		// if webView index >= 0 
+		// indicates webview have a corrspoding index on ObjC array
+		// can update
 		if (webViewIndex >= 0)
 		{
-			UWVUpdateWebViewTexture (webViewIndex);
+			UWVUpdateWebViewTexture (webViewIndex, (int)graphicAPIType);
 			if (gameObject.GetComponent <RawImage>().texture != webViewTexture)
 			{
 				gameObject.GetComponent <RawImage>().texture = webViewTexture;
@@ -129,6 +134,7 @@ public class UWVTexture : MonoBehaviour
 		}
 	}
 
+	#region some tweak
 	//if selected auto in editor script
 	//get current max api then apply for it
 	UWVTextureGraphicAPIType GetCurrentRunningAPI ()
@@ -149,6 +155,10 @@ public class UWVTexture : MonoBehaviour
 		}
 	}
 
+	#endregion
+
+	#region extern methods
+
 	[DllImport ("__Internal")]
 	public static extern int UWVCreateWebView(float width, float height);
 	[DllImport ("__Internal")]
@@ -156,7 +166,7 @@ public class UWVTexture : MonoBehaviour
 	[DllImport ("__Internal")]
 	public static extern void UWVSetWebViewTexturePtr(int index, IntPtr ptr, int graphicAPI);
 	[DllImport ("__Internal")]
-	public static extern void UWVUpdateWebViewTexture(int index);
-	[DllImport("__Internal")]
-	public static extern void UWVHelloFromUnity();
+	public static extern void UWVUpdateWebViewTexture(int index, int graphicAPI);
+
+	#endregion
 }

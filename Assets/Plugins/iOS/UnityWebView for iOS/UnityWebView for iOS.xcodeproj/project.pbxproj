@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0D526FC71CD9E4F700B7BA78 /* UnityWebView_for_iOS_GLTexture.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D526FC61CD9E4F700B7BA78 /* UnityWebView_for_iOS_GLTexture.m */; };
 		0DBB4FD91CD8CDA30008DDE6 /* UnityWebView_for_iOS.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0DBB4FD81CD8CDA30008DDE6 /* UnityWebView_for_iOS.h */; };
 		0DBB4FDB1CD8CDA30008DDE6 /* UnityWebView_for_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0DBB4FDA1CD8CDA30008DDE6 /* UnityWebView_for_iOS.mm */; };
 		0DBB4FE31CD8D35B0008DDE6 /* UnityWebView_for_iOS_Manager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DBB4FE21CD8D35B0008DDE6 /* UnityWebView_for_iOS_Manager.m */; };
@@ -26,6 +27,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0D526FC51CD9E4F700B7BA78 /* UnityWebView_for_iOS_GLTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnityWebView_for_iOS_GLTexture.h; sourceTree = "<group>"; };
+		0D526FC61CD9E4F700B7BA78 /* UnityWebView_for_iOS_GLTexture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnityWebView_for_iOS_GLTexture.m; sourceTree = "<group>"; };
 		0DBB4FD51CD8CDA30008DDE6 /* libUnityWebView for iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libUnityWebView for iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0DBB4FD81CD8CDA30008DDE6 /* UnityWebView_for_iOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UnityWebView_for_iOS.h; sourceTree = "<group>"; };
 		0DBB4FDA1CD8CDA30008DDE6 /* UnityWebView_for_iOS.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = UnityWebView_for_iOS.mm; sourceTree = "<group>"; };
@@ -67,6 +70,8 @@
 				0DBB4FDA1CD8CDA30008DDE6 /* UnityWebView_for_iOS.mm */,
 				0DBB4FE11CD8D35B0008DDE6 /* UnityWebView_for_iOS_Manager.h */,
 				0DBB4FE21CD8D35B0008DDE6 /* UnityWebView_for_iOS_Manager.m */,
+				0D526FC51CD9E4F700B7BA78 /* UnityWebView_for_iOS_GLTexture.h */,
+				0D526FC61CD9E4F700B7BA78 /* UnityWebView_for_iOS_GLTexture.m */,
 			);
 			path = "UnityWebView for iOS";
 			sourceTree = "<group>";
@@ -127,6 +132,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0D526FC71CD9E4F700B7BA78 /* UnityWebView_for_iOS_GLTexture.m in Sources */,
 				0DBB4FDB1CD8CDA30008DDE6 /* UnityWebView_for_iOS.mm in Sources */,
 				0DBB4FE31CD8D35B0008DDE6 /* UnityWebView_for_iOS_Manager.m in Sources */,
 			);
