@@ -23,7 +23,8 @@
                     :(float)height;
 
 - (void)SetTextureIntPtr:(int)index
-                        :(uintptr_t)ptr;
+                        :(uintptr_t)ptr
+                        :(int)graphicAPI;
 
 - (void)UpdateWebViewTexture:(int)index;
 

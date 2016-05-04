@@ -29,10 +29,11 @@ void UWVUpdateWebView(int index, float width, float height)
                                                                :width
                                                                :height];
 }
-void UWVSetWebViewTexturePtr(int index, uintptr_t ptr)
+void UWVSetWebViewTexturePtr(int index, uintptr_t ptr, int graphicAPI)
 {
     [[UnityWebView_for_iOS_Manager sharedManager] SetTextureIntPtr:index
-                                                                  :ptr];
+                                                                  :ptr
+                                                                  :graphicAPI];
 }
 void UWVUpdateWebViewTexture(int index)
 {

@@ -46,6 +46,7 @@
 
 - (void)SetTextureIntPtr:(int)index
                         :(uintptr_t)ptr
+                        :(int)graphicAPI
 {
     NSLog(@"SetTextureIntPtr Called");
     NSLog(@"ptr = %lu", ptr);

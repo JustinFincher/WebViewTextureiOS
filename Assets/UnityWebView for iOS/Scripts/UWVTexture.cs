@@ -98,12 +98,17 @@ public class UWVTexture : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		//test
-		UWVHelloFromUnity();
-		//create webview and get index in nsmutablearray
+		// if set to auto
+		// then check max api i can use
+		if (graphicAPIType == UWVTextureGraphicAPIType.Auto)
+		{
+			graphicAPIType = GetCurrentRunningAPI ();
+		}
+
+		// create webview and get index in nsmutablearray
 		webViewIndex = UWVCreateWebView (width, height);
-		//get texture intptr and send to objC side
-		UWVSetWebViewTexturePtr (webViewIndex, webViewTexture.GetNativeTexturePtr ());
+		// get texture intptr and send to objC side
+		UWVSetWebViewTexturePtr (webViewIndex, webViewTexture.GetNativeTexturePtr (),(int)graphicAPIType);
 	}
 	
 	// Update is called once per frame
@@ -124,12 +129,32 @@ public class UWVTexture : MonoBehaviour
 		}
 	}
 
+	//if selected auto in editor script
+	//get current max api then apply for it
+	UWVTextureGraphicAPIType GetCurrentRunningAPI ()
+	{
+		if (SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.Metal)
+		{
+			return UWVTextureGraphicAPIType.Metal;
+		} else if (SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.OpenGLES2)
+		{
+			return UWVTextureGraphicAPIType.OpenGL;
+		} else if (SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.OpenGLES3)
+		{
+			return UWVTextureGraphicAPIType.OpenGL;
+		} else
+		{
+			//fall back to opengl
+			return UWVTextureGraphicAPIType.OpenGL;
+		}
+	}
+
 	[DllImport ("__Internal")]
 	public static extern int UWVCreateWebView(float width, float height);
 	[DllImport ("__Internal")]
 	public static extern void UWVUpdateWebView(int index, float width, float height);
 	[DllImport ("__Internal")]
-	public static extern void UWVSetWebViewTexturePtr(int index, IntPtr ptr);
+	public static extern void UWVSetWebViewTexturePtr(int index, IntPtr ptr, int graphicAPI);
 	[DllImport ("__Internal")]
 	public static extern void UWVUpdateWebViewTexture(int index);
 	[DllImport("__Internal")]
